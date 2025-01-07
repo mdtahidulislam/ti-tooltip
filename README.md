@@ -4,7 +4,7 @@
 -   Use ti-tooltip.css from assets folder
 -   Copy ti-tooltip.js from assets folder
 
-## HTML markup
+### HTML markup
 
 ```html
 <div class="ti-tooltip-target">
@@ -18,19 +18,19 @@
 </div>
 ```
 
-## Stylesheet
+### Stylesheet
 
 ```html
 <link rel="stylesheet" href="path/ti-tooltip.css" />
 ```
 
-## Scripts
+### Scripts
 
 ```js
 <script src="path/ti-tooltip.js"></script>
 ```
 
-## Initialization
+### Initialization
 
 ```js
 // Initialize tooltips on page load

@@ -1,0 +1,67 @@
+/* main style */
+:root {
+    --ti-tooltip-bg: #fff;
+    --ti-tooltip-color: #000;
+    --ti-tooltip-alignment: "left";
+    --ti-tooltip-border-width: 2px;
+    --ti-tooltip-border-color: #82ACDD;
+    --ti-tooltip-arrow-color: #fff;
+    --ti-tooltip-border-radius: 0px;
+}
+
+#ti-tooltip {
+    text-align: var(--ti-tooltip-alignment);
+    color: var(--ti-tooltip-color);
+    background: var(--ti-tooltip-bg);
+    position: absolute;
+    z-index: 100;
+    padding: 15px;
+    border-top: var(--ti-tooltip-border-width) solid var(--ti-tooltip-border-color);
+    border-radius: var(--ti-tooltip-border-radius);
+    box-shadow: 0px 0px 30px 0px #0B0F3233;
+}
+
+#ti-tooltip:after {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--ti-tooltip-arrow-color);
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    margin-left: -10px;
+    pointer-events: none;
+}
+
+#ti-tooltip.top:after {
+    border-top-color: transparent;
+    border-bottom: 10px solid var(--ti-tooltip-arrow-color);
+    top: calc(-20px - var(--ti-tooltip-border-width));
+    bottom: auto;
+    pointer-events: none;
+}
+
+#ti-tooltip.left:after {
+    left: 10px;
+    margin: 0;
+    pointer-events: none;
+}
+
+#ti-tooltip.right:after {
+    right: 10px;
+    left: auto;
+    margin: 0;
+    pointer-events: none;
+}
+
+.ti-tooltip {
+    display: none;
+    width: auto;
+    max-width: 100% !important;
+}
+
+#ti-tooltip .ti-tooltip {
+    display: block;
+}

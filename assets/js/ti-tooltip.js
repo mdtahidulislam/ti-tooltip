@@ -231,9 +231,11 @@ Tooltip.prototype.calculatePosition = function () {
 
     // Adjust if tooltip is out of bounds
     if (pos_left < 0) {
+        console.log(typeof this.settings.horizontaPosition);
+
         pos_left = Math.round(
             this.target.offset().left +
-                this.target.outerWidth() / 2 -
+                this.target.outerWidth() / this.settings.horizontaPosition -
                 this.settings.offset
         );
         this.tooltip.addClass("left");
@@ -320,11 +322,11 @@ Tooltip.prototype.removeTooltip = function () {
      * @param {number} duration Duration of the animation in milliseconds.
      * @param {function} complete Callback function to run when the animation is complete.
      */
-    this.tooltip.animate(
-        { top: "-=10", opacity: 0 },
-        this.settings.animationDuration,
-        () => {
-            this.tooltip.remove();
-        }
-    );
+    // this.tooltip.animate(
+    //     { top: "-=10", opacity: 0 },
+    //     this.settings.animationDuration,
+    //     () => {
+    //         this.tooltip.remove();
+    //     }
+    // );
 };

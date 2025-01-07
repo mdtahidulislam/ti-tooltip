@@ -9,6 +9,7 @@
                 trigger: "hover",
                 offset: 20,
                 // position: "top",
+                horizontaPosition: 1.2, // 2 = center, 1 = right
                 animationDuration: 200,
                 maxWidth: 340,
                 // backgroundColor: "red",

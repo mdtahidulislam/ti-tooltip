@@ -9,6 +9,11 @@
     --ti-tooltip-border-radius: 0px;
 }
 
+.ti-tooltip-target {
+    max-width: fit-content;
+    height: auto;
+}
+
 #ti-tooltip {
     text-align: var(--ti-tooltip-alignment);
     color: var(--ti-tooltip-color);

@@ -173,10 +173,8 @@ Tooltip.prototype.updateStyles = function () {
  */
 Tooltip.prototype.showTooltip = function () {
     this.updateStyles();
-
     const tipContent = this.target.children(".ti-tooltip").html();
     if (!tipContent) {
-        console.error("Tooltip content not found for:", this.target);
         return;
     }
 
@@ -197,7 +195,7 @@ Tooltip.prototype.showTooltip = function () {
 Tooltip.prototype.adjustMaxWidth = function () {
     const windowWidth = $(window).width();
     const adjustedWidth =
-        windowWidth < this.tooltip.outerWidth() * 1.5
+        windowWidth < this.tooltip.outerWidth()
             ? windowWidth / 2
             : this.settings.maxWidth;
     this.tooltip.css("max-width", adjustedWidth);
@@ -217,27 +215,75 @@ Tooltip.prototype.adjustMaxWidth = function () {
  * The tooltip is then positioned at the calculated left and top positions.
  * @return {Object} An object with left and top properties set to the calculated positions.
  */
+// Tooltip.prototype.calculatePosition = function () {
+//     console.log("target:", this.target.offset().left);
+
+//     var pos_left = Math.round(
+//         this.target.offset().left +
+//             this.target.outerWidth() / 2 -
+//             this.tooltip.outerWidth() / 2
+//     );
+//     var pos_top = Math.round(
+//         this.target.offset().top -
+//             this.tooltip.outerHeight() -
+//             this.settings.offset
+//     );
+//     // Adjust if tooltip is out of bounds
+//     if (pos_left < 0) {
+//         pos_left = Math.round(
+//             this.target.offset().left +
+//                 this.target.outerWidth() / 2 -
+//                 this.settings.offset
+//         ); // for horizontal custom positioning
+//         this.tooltip.addClass("left");
+//     } else {
+//         this.tooltip.removeClass("left");
+//     }
+
+//     if (pos_left + this.tooltip.outerWidth() > $(window).width()) {
+//         pos_left = Math.round(
+//             this.target.offset().left -
+//                 this.tooltip.outerWidth() +
+//                 this.target.outerWidth() / 2 +
+//                 this.settings.offset
+//         );
+//         this.tooltip.addClass("right");
+//     } else {
+//         this.tooltip.removeClass("right");
+//     }
+
+//     if (pos_top < 0) {
+//         pos_top = Math.round(
+//             this.target.offset().top + this.target.outerHeight()
+//         );
+//         this.tooltip.addClass("top");
+//     } else {
+//         this.tooltip.removeClass("top");
+//     }
+//     console.log("pos_left:", pos_left, "pos_top:", pos_top);
+//     return { left: pos_left, top: pos_top };
+// };
 Tooltip.prototype.calculatePosition = function () {
+    console.log("target:", this.target.offset().left);
+
     var pos_left = Math.round(
         this.target.offset().left +
-            this.target.outerWidth() / 2 -
-            this.tooltip.outerWidth() / 2
+            this.target.outerWidth() / this.settings.horizontaPosition -
+            this.tooltip.outerWidth() / this.settings.horizontaPosition
     );
     var pos_top = Math.round(
         this.target.offset().top -
             this.tooltip.outerHeight() -
             this.settings.offset
     );
-
+    console.log("pos_left:", pos_left, "pos_top:", pos_top);
     // Adjust if tooltip is out of bounds
     if (pos_left < 0) {
-        console.log(typeof this.settings.horizontaPosition);
-
         pos_left = Math.round(
             this.target.offset().left +
                 this.target.outerWidth() / this.settings.horizontaPosition -
                 this.settings.offset
-        );
+        ); // for horizontal custom positioning
         this.tooltip.addClass("left");
     } else {
         this.tooltip.removeClass("left");
@@ -263,9 +309,7 @@ Tooltip.prototype.calculatePosition = function () {
     } else {
         this.tooltip.removeClass("top");
     }
-
     console.log("pos_left:", pos_left, "pos_top:", pos_top);
-
     return { left: pos_left, top: pos_top };
 };
 
@@ -287,16 +331,6 @@ Tooltip.prototype.positionTooltip = function () {
 
     /**
      * Calculate position of the tooltip based on the target element's position.
-     * The position is calculated as follows:
-     * - If the tooltip is positioned above the target, the top position is calculated as the target's top position minus
-     *   the tooltip's height minus the offset.
-     * - If the tooltip is positioned below the target, the top position is calculated as the target's bottom position plus
-     *   the offset.
-     * - If the tooltip is positioned to the left of the target, the left position is calculated as the target's left position
-     *   minus the tooltip's width minus the offset.
-     * - If the tooltip is positioned to the right of the target, the left position is calculated as the target's right position
-     *   plus the offset.
-     * The tooltip is then positioned at the calculated left and top positions.
      * @return {Object} An object with left and top properties set to the calculated positions.
      */
     const { left, top } = this.calculatePosition();

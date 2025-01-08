@@ -11,7 +11,7 @@
                 // position: "top",
                 horizontaPosition: 1.2, // 2 = center, 1 = right
                 animationDuration: 200,
-                maxWidth: 340,
+                maxWidth: 700,
                 // backgroundColor: "red",
                 // textColor: "#fff",
                 // textAlignment: "left",

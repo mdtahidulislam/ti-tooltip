@@ -7,6 +7,7 @@
     --ti-tooltip-border-color: #82ACDD;
     --ti-tooltip-arrow-color: #fff;
     --ti-tooltip-border-radius: 0px;
+    --ti-tooltip-maxwidth: 700px;
 }
 
 .ti-tooltip-target {
@@ -24,6 +25,7 @@
     border-top: var(--ti-tooltip-border-width) solid var(--ti-tooltip-border-color);
     border-radius: var(--ti-tooltip-border-radius);
     box-shadow: 0px 0px 30px 0px #0B0F3233;
+    max-width: var(--ti-tooltip-maxwidth);
 }
 
 #ti-tooltip:after {

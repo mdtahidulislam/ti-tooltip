@@ -102,6 +102,7 @@ function updateCSSVariable(variableName, value) {
  * @instance
  */
 Tooltip.prototype.init = function () {
+    this.adjustMaxWidth();
     this.bindEvents();
 };
 
@@ -164,6 +165,7 @@ Tooltip.prototype.updateStyles = function () {
     updateCSSVariable("--ti-tooltip-border-color", this.settings.borderColor);
     updateCSSVariable("--ti-tooltip-border-radius", this.settings.borderRadius);
     updateCSSVariable("--ti-tooltip-arrow-color", this.settings.arrowColor);
+    updateCSSVariable("--ti-tooltip-maxwidth", this.settings.maxWidth);
 };
 
 /**
@@ -192,12 +194,34 @@ Tooltip.prototype.showTooltip = function () {
  * @memberof Tooltip
  * @instance
  */
+// Tooltip.prototype.adjustMaxWidth = function () {
+//     const windowWidth = $(window).width();
+
+//     const adjustedWidth =
+//         windowWidth <
+//         this.tooltip.outerWidth() * this.settings.horizontaPosition
+//             ? windowWidth / 2
+//             : this.settings.maxWidth;
+//     this.tooltip.css("max-width", adjustedWidth);
+// };
 Tooltip.prototype.adjustMaxWidth = function () {
     const windowWidth = $(window).width();
-    const adjustedWidth =
-        windowWidth < this.tooltip.outerWidth()
-            ? windowWidth / 2
-            : this.settings.maxWidth;
+    // Get calculated left position
+    const { left } = this.calculatePosition();
+    const tooltipWidth = this.tooltip.outerWidth();
+    let adjustedWidth;
+
+    // Check if the tooltip overflows the right side of the window
+    if (windowWidth < tooltipWidth + left) {
+        adjustedWidth = Math.min(
+            tooltipWidth / this.settings.horizontaPosition,
+            windowWidth - left - 20 // Ensure 20px margin
+        );
+    } else {
+        adjustedWidth = this.settings.maxWidth;
+    }
+
+    // Apply the adjusted max-width
     this.tooltip.css("max-width", adjustedWidth);
 };
 
@@ -289,17 +313,17 @@ Tooltip.prototype.calculatePosition = function () {
         this.tooltip.removeClass("left");
     }
 
-    if (pos_left + this.tooltip.outerWidth() > $(window).width()) {
-        pos_left = Math.round(
-            this.target.offset().left -
-                this.tooltip.outerWidth() +
-                this.target.outerWidth() / 2 +
-                this.settings.offset
-        );
-        this.tooltip.addClass("right");
-    } else {
-        this.tooltip.removeClass("right");
-    }
+    // if (pos_left + this.tooltip.outerWidth() > $(window).width()) {
+    //     pos_left = Math.round(
+    //         this.target.offset().left -
+    //             this.tooltip.outerWidth() +
+    //             this.target.outerWidth() / this.settings.horizontaPosition +
+    //             this.settings.offset
+    //     );
+    //     this.tooltip.addClass("right");
+    // } else {
+    //     this.tooltip.removeClass("right");
+    // }
 
     if (pos_top < 0) {
         pos_top = Math.round(
@@ -356,11 +380,11 @@ Tooltip.prototype.removeTooltip = function () {
      * @param {number} duration Duration of the animation in milliseconds.
      * @param {function} complete Callback function to run when the animation is complete.
      */
-    // this.tooltip.animate(
-    //     { top: "-=10", opacity: 0 },
-    //     this.settings.animationDuration,
-    //     () => {
-    //         this.tooltip.remove();
-    //     }
-    // );
+    this.tooltip.animate(
+        { top: "-=10", opacity: 0 },
+        this.settings.animationDuration,
+        () => {
+            this.tooltip.remove();
+        }
+    );
 };

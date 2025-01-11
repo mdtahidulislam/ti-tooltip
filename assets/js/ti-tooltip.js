@@ -205,18 +205,48 @@ Tooltip.prototype.showTooltip = function () {
 //     this.tooltip.css("max-width", adjustedWidth);
 // };
 Tooltip.prototype.adjustMaxWidth = function () {
-    const windowWidth = $(window).width();
     // Get calculated left position
-    const { left } = this.calculatePosition();
+    const { left, windowWidth, rightSpace, leftSpace } =
+        this.calculatePosition();
     const tooltipWidth = this.tooltip.outerWidth();
+    console.log(
+        "left:",
+        left,
+        "windowWidth:",
+        windowWidth,
+        "rightSpace:",
+        rightSpace,
+        "leftSpace:",
+        leftSpace
+    );
+
     let adjustedWidth;
 
     // Check if the tooltip overflows the right side of the window
-    if (windowWidth < tooltipWidth + left) {
-        adjustedWidth = Math.min(
-            tooltipWidth / this.settings.horizontaPosition,
-            windowWidth - left - 20 // Ensure 20px margin
-        );
+    // if (windowWidth < tooltipWidth + left) {
+    //     adjustedWidth = Math.min(
+    //         tooltipWidth / this.settings.horizontaPosition,
+    //         windowWidth - left - 20 // Ensure 20px margin
+    //     );
+    //     adjustedWidth = windowWidth / 2;
+    // } else {
+    //     adjustedWidth = this.settings.maxWidth;
+    // }
+    // if (left < 0) {
+    if (rightSpace === 0) {
+        // adjustedWidth = Math.min(
+        //     tooltipWidth / this.settings.horizontaPosition,
+        //     windowWidth - left - 20 // Ensure 20px margin
+        // );
+        if (leftSpace > this.settings.maxWidth) {
+            console.log("leftSpacebig:");
+
+            adjustedWidth = this.settings.maxWidth;
+        } else {
+            adjustedWidth = windowWidth - 20;
+            console.log("leftSpacesmall:");
+        }
+        // adjustedWidth = windowWidth - this.settings.offset - 20;
     } else {
         adjustedWidth = this.settings.maxWidth;
     }
@@ -228,8 +258,11 @@ Tooltip.prototype.adjustMaxWidth = function () {
 /**
  * Method to calculate position of the tooltip based on the target element's position.
  * The position is calculated as follows:
- * - If the tooltip is positioned above the target, the top position is calculated as the target's top position minus
- *   the tooltip's height minus the offset.
+ * - top/bottom:
+ *    baseline then place it above the target and finally make some distance between the target and the tooltip.
+ *    baseline then place it bottom the target and finally make some distance between the target and the tooltip.
+ *    (-ve) means off-screen or out of the viewport boundary.
+ *    (+ve) means on-screen or within the viewport boundary.
  * - If the tooltip is positioned below the target, the top position is calculated as the target's bottom position plus
  *   the offset.
  * - If the tooltip is positioned to the left of the target, the left position is calculated as the target's left position
@@ -288,36 +321,64 @@ Tooltip.prototype.adjustMaxWidth = function () {
 //     return { left: pos_left, top: pos_top };
 // };
 Tooltip.prototype.calculatePosition = function () {
-    console.log("target:", this.target.offset().left);
-
-    var pos_left = Math.round(
+    let windowWidth = $(window).width();
+    let rightSpace =
+        windowWidth - (this.target.offset().left + this.target.outerWidth());
+    let leftSpace = windowWidth - this.tooltip.outerWidth();
+    let pos_left = Math.round(
         this.target.offset().left +
-            this.target.outerWidth() / this.settings.horizontaPosition -
-            this.tooltip.outerWidth() / this.settings.horizontaPosition
+            this.target.outerWidth() -
+            this.settings.offset
     );
-    var pos_top = Math.round(
+    let pos_top = Math.round(
         this.target.offset().top -
             this.tooltip.outerHeight() -
             this.settings.offset
     );
-    console.log("pos_left:", pos_left, "pos_top:", pos_top);
-    // Adjust if tooltip is out of bounds
-    if (pos_left < 0) {
+
+    // Check for right overflow
+    // if (pos_left + this.tooltip.outerWidth() > $(window).width()) {
+    if (rightSpace === 0) {
+        // Position tooltip on the left side of the target
         pos_left = Math.round(
             this.target.offset().left +
-                this.target.outerWidth() / this.settings.horizontaPosition -
+                this.target.outerWidth() -
+                this.tooltip.outerWidth() -
                 this.settings.offset
-        ); // for horizontal custom positioning
-        this.tooltip.addClass("left");
+        );
+        console.log("right_overflow_pos_left:", pos_left);
+        this.tooltip.addClass("right");
     } else {
-        this.tooltip.removeClass("left");
+        this.tooltip.removeClass("right");
     }
+    // var pos_left = Math.round(
+    //     this.target.offset().left +
+    //         this.target.outerWidth() / 2 -
+    //         this.tooltip.outerWidth() / 2
+    // );
+    // var pos_top = Math.round(
+    //     this.target.offset().top -
+    //         this.tooltip.outerHeight() -
+    //         this.settings.offset
+    // );
+    // console.log("pos_left:", pos_left, "pos_top:", pos_top);
+    // // Adjust if tooltip is out of bounds
+    // if (pos_left < 0) {
+    //     pos_left = Math.round(
+    //         this.target.offset().left +
+    //             this.target.outerWidth() / 2 -
+    //             this.settings.offset
+    //     ); // for horizontal custom positioning
+    //     this.tooltip.addClass("left");
+    // } else {
+    //     this.tooltip.removeClass("left");
+    // }
 
     // if (pos_left + this.tooltip.outerWidth() > $(window).width()) {
     //     pos_left = Math.round(
     //         this.target.offset().left -
     //             this.tooltip.outerWidth() +
-    //             this.target.outerWidth() / this.settings.horizontaPosition +
+    //             this.target.outerWidth() / 2 +
     //             this.settings.offset
     //     );
     //     this.tooltip.addClass("right");
@@ -334,7 +395,7 @@ Tooltip.prototype.calculatePosition = function () {
         this.tooltip.removeClass("top");
     }
     console.log("pos_left:", pos_left, "pos_top:", pos_top);
-    return { left: pos_left, top: pos_top };
+    return { left: pos_left, top: pos_top, windowWidth, rightSpace, leftSpace };
 };
 
 /**
@@ -380,11 +441,11 @@ Tooltip.prototype.removeTooltip = function () {
      * @param {number} duration Duration of the animation in milliseconds.
      * @param {function} complete Callback function to run when the animation is complete.
      */
-    this.tooltip.animate(
-        { top: "-=10", opacity: 0 },
-        this.settings.animationDuration,
-        () => {
-            this.tooltip.remove();
-        }
-    );
+    // this.tooltip.animate(
+    //     { top: "-=10", opacity: 0 },
+    //     this.settings.animationDuration,
+    //     () => {
+    //         this.tooltip.remove();
+    //     }
+    // );
 };

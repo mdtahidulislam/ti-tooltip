@@ -3,11 +3,11 @@
     --ti-tooltip-bg: #fff;
     --ti-tooltip-color: #000;
     --ti-tooltip-alignment: "left";
-    --ti-tooltip-border-width: 2px;
+    --ti-tooltip-border-width: .125rem;
     --ti-tooltip-border-color: #82ACDD;
     --ti-tooltip-arrow-color: #fff;
-    --ti-tooltip-border-radius: 0px;
-    --ti-tooltip-maxwidth: 700px;
+    --ti-tooltip-border-radius: 0rem;
+    --ti-tooltip-maxwidth: 43.75rem;
 }
 
 .ti-tooltip-target {
@@ -21,7 +21,7 @@
     background: var(--ti-tooltip-bg);
     position: absolute;
     z-index: 100;
-    padding: 15px;
+    padding: .9375rem;
     border-top: var(--ti-tooltip-border-width) solid var(--ti-tooltip-border-color);
     border-radius: var(--ti-tooltip-border-radius);
     box-shadow: 0px 0px 30px 0px #0B0F3233;
@@ -31,33 +31,33 @@
 #ti-tooltip:after {
     width: 0;
     height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid var(--ti-tooltip-arrow-color);
+    border-left: 0.625rem solid transparent;
+    border-right: 0.625rem solid transparent;
+    border-top: 0.625rem solid var(--ti-tooltip-arrow-color);
     content: '';
     position: absolute;
     left: 50%;
-    bottom: -10px;
-    margin-left: -10px;
+    bottom: -0.625rem;
+    margin-left: -0.625rem;
     pointer-events: none;
 }
 
 #ti-tooltip.top:after {
     border-top-color: transparent;
-    border-bottom: 10px solid var(--ti-tooltip-arrow-color);
-    top: calc(-20px - var(--ti-tooltip-border-width));
+    border-bottom: 0.625rem solid var(--ti-tooltip-arrow-color);
+    top: calc(-1.25rem - var(--ti-tooltip-border-width));
     bottom: auto;
     pointer-events: none;
 }
 
 #ti-tooltip.left:after {
-    left: 10px;
+    left: 0.625rem;
     margin: 0;
     pointer-events: none;
 }
 
 #ti-tooltip.right:after {
-    right: 10px;
+    right: 0.625rem;
     left: auto;
     margin: 0;
     pointer-events: none;

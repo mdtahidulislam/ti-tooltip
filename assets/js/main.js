@@ -9,13 +9,13 @@
                 trigger: "hover",
                 offset: 20,
                 // position: "top",
-                horizontaPosition: 1.2, // 2 = center, 1 = right
+                horizontaPosition: 1, // 2 = center, 1 = right
                 animationDuration: 200,
-                maxWidth: 600,
+                maxWidth: 700,
                 // backgroundColor: "red",
                 // textColor: "#fff",
                 // textAlignment: "left",
-                // borderWidth: "1px",
+                borderWidth: "4px",
                 // borderColor: "#ececec",
                 // borderRadius: "5px",
                 // arrowColor: "#333"
